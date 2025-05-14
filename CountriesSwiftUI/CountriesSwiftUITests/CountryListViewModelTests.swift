@@ -59,4 +59,28 @@ final class CountryListViewModelTests: XCTestCase {
 
         wait(for: [expectation], timeout: 1)
     }
+    
+    func testSearchTextFiltersCountries() {
+        // Given
+        let mockService = MockCountryService()
+        let viewModel = CountryListViewModel(service: mockService)
+        let expectation = XCTestExpectation(description: "Search filtered results")
+
+        viewModel.$countries
+            .dropFirst(2)
+            .sink { countries in
+                // Then
+                XCTAssertEqual(countries.count, 1)
+                XCTAssertEqual(countries[0].name.common, "France")
+                expectation.fulfill()
+            }
+            .store(in: &cancellables)
+
+        // When
+        viewModel.fetchCountries()
+        viewModel.searchText = "paris"
+
+        wait(for: [expectation], timeout: 2)
+    }
+
 }
