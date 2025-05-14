@@ -47,6 +47,7 @@ class CountryListViewModel: ObservableObject {
         errorMessage = nil
 
         service.fetchCountries()
+            .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] completion in
                 self?.isLoading = false
                 if case let .failure(error) = completion {

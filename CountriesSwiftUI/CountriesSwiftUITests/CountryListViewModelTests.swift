@@ -35,4 +35,28 @@ final class CountryListViewModelTests: XCTestCase {
         viewModel.fetchCountries()
         wait(for: [expectation], timeout: 1)
     }
+    
+    func testFetchCountriesPublishesError() {
+        // Given
+        let mockService = MockCountryService()
+        mockService.shouldFail = true
+
+        let viewModel = CountryListViewModel(service: mockService)
+        let expectation = XCTestExpectation(description: "Error received")
+
+        // When
+        viewModel.fetchCountries()
+        viewModel.$errorMessage
+            .dropFirst()
+            .sink { error in
+                // Then
+                XCTAssertNotNil(error)
+                XCTAssertEqual(viewModel.countries.count, 0)
+                XCTAssertFalse(viewModel.isLoading)
+                expectation.fulfill()
+            }
+            .store(in: &cancellables)
+
+        wait(for: [expectation], timeout: 1)
+    }
 }

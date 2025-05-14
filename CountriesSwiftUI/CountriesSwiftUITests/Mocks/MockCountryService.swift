@@ -10,7 +10,14 @@ import Combine
 @testable import CountriesSwiftUI
 
 class MockCountryService: CountryServiceProtocol {
+    var shouldFail: Bool = false
+
     func fetchCountries() -> AnyPublisher<[Country], Error> {
+        if shouldFail {
+            return Fail(error: URLError(.notConnectedToInternet))
+                .eraseToAnyPublisher()
+        }
+
         let sample: [Country] = [
             Country(name: .init(common: "Spain"), capital: ["Madrid"], flags: .init(png: "https://flagcdn.com/w320/es.png"), cca3: "ESP", region: "Europe", population: 47000000),
             Country(name: .init(common: "France"), capital: ["Paris"], flags: .init(png: "https://flagcdn.com/w320/fr.png"), cca3: "FRA", region: "Europe", population: 65000000)
