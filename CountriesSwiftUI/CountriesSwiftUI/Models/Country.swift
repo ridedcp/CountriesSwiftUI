@@ -25,3 +25,9 @@ struct Name: Decodable {
 struct Flags: Decodable {
     let png: String
 }
+
+extension Country {
+    var isFavorite: Bool {
+        FavoriteManager.shared.isFavorite(cca3: cca3)
+    }
+}

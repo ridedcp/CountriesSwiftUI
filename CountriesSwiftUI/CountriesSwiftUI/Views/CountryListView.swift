@@ -22,26 +22,38 @@ struct CountryListView: View {
                         .padding()
                 } else {
                     List(viewModel.countries) { country in
-                        NavigationLink(destination: CountryDetailView(country: country)) {
-                            HStack {
-                                AsyncImage(url: URL(string: country.flags.png)) { image in
-                                    image.resizable()
-                                } placeholder: {
-                                    Color.gray
-                                }
-                                .frame(width: 40, height: 25)
-                                .cornerRadius(4)
+                        HStack {
+                            NavigationLink(destination: CountryDetailView(country: country)) {
+                                HStack {
+                                    AsyncImage(url: URL(string: country.flags.png)) { image in
+                                        image.resizable()
+                                    } placeholder: {
+                                        Color.gray
+                                    }
+                                    .frame(width: 40, height: 25)
+                                    .cornerRadius(4)
 
-                                VStack(alignment: .leading) {
-                                    Text(country.name.common)
-                                        .font(.headline)
-                                    if let capital = country.capital?.first {
-                                        Text("Capital: \(capital)")
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
+                                    VStack(alignment: .leading) {
+                                        Text(country.name.common)
+                                            .font(.headline)
+                                        if let capital = country.capital?.first {
+                                            Text("Capital: \(capital)")
+                                                .font(.subheadline)
+                                                .foregroundColor(.secondary)
+                                        }
                                     }
                                 }
                             }
+
+                            Spacer()
+
+                            Button {
+                                viewModel.toggleFavorite(for: country)
+                            } label: {
+                                Image(systemName: viewModel.isFavorite(country) ? "star.fill" : "star")
+                                    .foregroundColor(.yellow)
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
                     }
                     .listStyle(.plain)
