@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CountryListView: View {
-    @StateObject private var viewModel = CountryListViewModel()
+    @ObservedObject var viewModel = CountryListViewModel()
 
     var body: some View {
         NavigationView {

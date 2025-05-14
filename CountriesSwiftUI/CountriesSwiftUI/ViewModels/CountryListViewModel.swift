@@ -18,6 +18,10 @@ class CountryListViewModel: ObservableObject {
     private let service = CountryService()
     private var cancellables = Set<AnyCancellable>()
     private var allCountries: [Country] = []
+    
+    var favoriteCountries: [Country] {
+        countries.filter { isFavorite($0) }
+    }
 
     init() {
         $searchText

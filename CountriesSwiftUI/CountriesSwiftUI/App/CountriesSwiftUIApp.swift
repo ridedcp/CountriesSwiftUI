@@ -9,9 +9,22 @@ import SwiftUI
 
 @main
 struct CountriesSwiftUIApp: App {
+    
+    @StateObject private var viewModel = CountryListViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            CountryListView()
+            TabView {
+                CountryListView(viewModel: viewModel)
+                    .tabItem {
+                        Label("All", systemImage: "globe")
+                    }
+                
+                FavoriteCountriesView(viewModel: viewModel)
+                    .tabItem {
+                        Label("Favorites", systemImage: "star.fill")
+                    }
+            }
         }
     }
 }
