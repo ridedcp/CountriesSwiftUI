@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class CountryService {
+class CountryService: CountryServiceProtocol {
     private let url = URL(string: "https://restcountries.com/v3.1/all")!
 
     func fetchCountries() -> AnyPublisher<[Country], Error> {

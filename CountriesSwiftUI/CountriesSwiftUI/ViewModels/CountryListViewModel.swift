@@ -15,7 +15,7 @@ class CountryListViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published private(set) var favoriteIDs: Set<String> = []
 
-    private let service = CountryService()
+    private let service: CountryServiceProtocol
     private var cancellables = Set<AnyCancellable>()
     private var allCountries: [Country] = []
     
@@ -23,7 +23,9 @@ class CountryListViewModel: ObservableObject {
         countries.filter { isFavorite($0) }
     }
 
-    init() {
+    init(service: CountryServiceProtocol = CountryService()) {
+        self.service = service
+        
         $searchText
             .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
             .removeDuplicates()
